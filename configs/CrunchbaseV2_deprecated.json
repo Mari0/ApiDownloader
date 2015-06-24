@@ -1,0 +1,184 @@
+{
+	"name":"Crunchbase",
+	"basePath":"https://api.crunchbase.com/v/2/",
+	"apiVersion":"2",
+	"apiKey":"<%- key %>",
+	"endpoints":{
+		"organization":{
+			"identifier":"permalink",
+			"path":"organization/{permalink}",
+			"method":"GET",
+			"required_parameters":{
+				"user_key":"@apiKey"
+				},
+			"additionalRequest":[
+				{
+					"name":"past_team",
+					"method":"GET",
+					"request_condition":"$.data.relationships.past_team.paging.total_items > 8",
+					"jsonPath":"$.data.relationships.past_team.paging.first_page_url",
+					"required_parameters":{
+						"user_key":"@apiKey"
+					}
+				},
+				{
+					"name":"board_members_and_advisors",
+					"method":"GET",
+					"request_condition":"$.data.relationships.board_members_and_advisors.paging.total_items > 8",
+					"jsonPath":"$.data.relationships.board_members_and_advisors.paging.first_page_url",
+					"required_parameters":{
+						"user_key":"@apiKey"
+					}
+				},
+				{
+					"name":"sub_organizations",
+					"method":"GET",
+					"request_condition":"$.data.relationships.sub_organizations.paging.total_items > 8",
+					"jsonPath":"$.data.relationships.sub_organizations.paging.first_page_url",
+					"required_parameters":{
+						"user_key":"@apiKey"
+					}
+				},
+				{
+					"name":"current_team",
+					"method":"GET",
+					"request_condition":"$.data.relationships.current_team.paging.total_items > 8",
+					"jsonPath":"$.data.relationships.current_team.paging.first_page_url",
+					"required_parameters":{
+						"user_key":"@apiKey"
+					}
+				},
+				{
+					"name":"acquisitions",
+					"method":"GET",
+					"request_condition":"$.data.relationships.acquisitions.paging.total_items > 8",
+					"jsonPath":"$.data.relationships.acquisitions.paging.first_page_url",
+					"required_parameters":{
+						"user_key":"@apiKey"
+					}
+				},
+				{
+					"name":"competitors",
+					"method":"GET",
+					"request_condition":"$.data.relationships.competitors.paging.total_items > 8",
+					"jsonPath":"$.data.relationships.competitors.paging.first_page_url",
+					"required_parameters":{
+						"user_key":"@apiKey"
+					}
+				},
+				{
+					"name":"offices",
+					"method":"GET",
+					"request_condition":"$.data.relationships.offices.paging.total_items > 8",
+					"jsonPath":"$.data.relationships.offices.paging.first_page_url",
+					"required_parameters":{
+						"user_key":"@apiKey"
+					}
+				},
+				{
+					"name":"headquarters",
+					"method":"GET",
+					"request_condition":"$.data.relationships.headquarters.paging.total_items > 8",
+					"jsonPath":"$.data.relationships.headquarters.paging.first_page_url",
+					"required_parameters":{
+						"user_key":"@apiKey"
+					}
+				},
+				{
+					"name":"funding_rounds",
+					"method":"GET",
+					"request_condition":"$.data.relationships.funding_rounds.paging.total_items > 8",
+					"jsonPath":"$.data.relationships.funding_rounds.paging.first_page_url",
+					"required_parameters":{
+						"user_key":"@apiKey"
+					}
+				},
+				{
+					"name":"categories",
+					"method":"GET",
+					"request_condition":"$.data.relationships.categories.paging.total_items > 8",
+					"jsonPath":"$.data.relationships.categories.paging.first_page_url",
+					"required_parameters":{
+						"user_key":"@apiKey"
+					}
+				},
+				{
+					"name":"members",
+					"method":"GET",
+					"request_condition":"$.data.relationships.members.paging.total_items > 8",
+					"jsonPath":"$.data.relationships.members.paging.first_page_url",
+					"required_parameters":{
+						"user_key":"@apiKey"
+					}
+				},
+				{
+					"name":"customers",
+					"method":"GET",
+					"request_condition":"$.data.relationships.customers.paging.total_items > 8",
+					"jsonPath":"$.data.relationships.customers.paging.first_page_url",
+					"required_parameters":{
+						"user_key":"@apiKey"
+					}
+				},
+				{
+					"name":"investments",
+					"method":"GET",
+					"request_condition":"$.data.relationships.investments.paging.total_items > 8",
+					"jsonPath":"$.data.relationships.investments.paging.first_page_url",
+					"required_parameters":{
+						"user_key":"@apiKey"
+					}
+				},
+				{
+					"name":"founders",
+					"method":"GET",
+					"request_condition":"$.data.relationships.founders.paging.total_items > 8",
+					"jsonPath":"$.data.relationships.founders.paging.first_page_url",
+					"required_parameters":{
+						"user_key":"@apiKey"
+					}
+				},
+				{
+					"name":"ipo",
+					"method":"GET",
+					"request_condition":"$.data.relationships.ipo.paging.total_items > 8",
+					"jsonPath":"$.data.relationships.ipo.paging.first_page_url",
+					"required_parameters":{
+						"user_key":"@apiKey"
+					}
+				},
+				{
+					"name":"products",
+					"method":"GET",
+					"request_condition":"$.data.relationships.products.paging.total_items > 8",
+					"jsonPath":"$.data.relationships.products.paging.first_page_url",
+					"required_parameters":{
+						"user_key":"@apiKey"
+					}
+				},
+				{
+					"name":"websites",
+					"method":"GET",
+					"request_condition":"$.data.relationships.websites.paging.total_items > 8",
+					"jsonPath":"$.data.relationships.websites.paging.first_page_url",
+					"required_parameters":{
+						"user_key":"@apiKey"
+					}
+				}
+			]
+		},
+		"organizations":{
+			"path":"organizations",
+			"method":"GET",
+			"required_parameters":{"user_key":"@apiKey"},
+			"optional_parameters":{"page":"@user", "order":"@user"}
+		},
+		"investment":{
+			"identifier":"uuid",
+			"path":"funding-round/{uuid}",
+			"required_parameters":{
+				"user_key":"@apiKey"
+				}
+		}
+	}
+}

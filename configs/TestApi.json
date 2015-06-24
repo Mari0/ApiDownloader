@@ -1,0 +1,28 @@
+{
+	"name":"TestAPI",
+	"basePath":"http://notreal.com/api/",
+	"apiVersion":"2",
+	"apiKey":"123456789",
+	"endpoints":{
+		"entity1":{
+			"identifier":"id",
+			"path":"entity1/{id}",
+			"method":"GET",
+			"required_parameters":{
+				"access_key":"@apiKey",
+				"constant":"constantlyRequired",
+				"userInput":"@user"
+				}
+		},
+		"entity2":{
+			"path":"entity2",
+			"method":"GET",
+			"required_parameters":{
+				"user_key":"@apiKey",
+				"constant1":"constantlyRequired1",
+				"constant2":"constantlyRequired2",
+				"moreUserInput":"@user"},
+			"optional_parameters":{"optUserIn1":"@user", "optUserIn2":"@user"}
+		}
+	}
+}

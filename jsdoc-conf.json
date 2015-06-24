@@ -1,0 +1,28 @@
+{
+"tags": {
+    "allowUnknownTags": true
+},
+"source": {
+    "include": ["js"],
+    "exclude": [],
+    "includePattern": ".+\\.js(doc)?$",
+    "excludePattern": "(^|\\/|\\\\)_"
+},
+"plugins": [],
+"templates": {
+    "cleverLinks": false,
+    "monospaceLinks": false
+},
+"opts": { 
+    "encoding": "utf8",              
+    "destination": "./out/",        
+    "recurse": true,                      
+    "private": true,                  
+    "lenient": false,                
+    "version": false,                 
+    "explain": false,                                   
+    "help": false,                     
+    "verbose": true,                          
+    "nocolor": false         
+}
+}

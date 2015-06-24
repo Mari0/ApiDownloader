@@ -1,0 +1,12 @@
+{
+	"name":"Zipopotam",
+	"basePath":"http://api.zippopotam.us",
+	"apiVersion":1,
+	"endpoints":{
+		"german_zip":{
+			"identifier":"zip",
+			"path":"/de/{zip}",
+			"method":"GET"
+		}
+	}
+}

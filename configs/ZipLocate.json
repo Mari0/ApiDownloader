@@ -1,0 +1,12 @@
+{
+	"name":"ZipLocate",
+	"basePath":"http://ziplocate.us/api/v1/",
+	"apiVersion":1,
+	"endpoints":{
+		"Zip":{
+			"identifier":"zip",
+			"path":"{zip}",
+			"method":"GET"
+		}
+	}
+}
