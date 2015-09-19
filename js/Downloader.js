@@ -39,8 +39,9 @@ exports.Downloader = function (ApiSettings, IdList, requestsProJob, cronPattern,
             })();
 
             if (error) {
-                if (error.constructor.name === 'Error')
+                if (error.constructor.name === 'Error') {
                     console.log(error);
+                }
 			}
 			counter++;
 			if (counter === IdList.length) {
@@ -49,7 +50,16 @@ exports.Downloader = function (ApiSettings, IdList, requestsProJob, cronPattern,
 		}
 	}, onComplete, true);
 };
-
+/**
+ * A simpler version of the Downloader
+ * @param ReqList the request list can be a array or an object
+ * @param propertyValueOfUrl if the request list is a object the property name of the url
+ * @param requestsProJob the request pro job
+ * @param cronPattern the cron pattern
+ * @param onDownload callback on each download
+ * @param onComplete callback when the cron job terminates
+ * @constructor
+ */
 exports.SimpleDownloader = function (ReqList, propertyValueOfUrl, requestsProJob, cronPattern, onDownload, onComplete) {
 	var CronJob = require('cron').CronJob;
 	var request = require('request');
@@ -80,8 +90,9 @@ exports.SimpleDownloader = function (ReqList, propertyValueOfUrl, requestsProJob
 				onDownload(data.body, data.meta);
 			});
 			counter++;
-			if (counter === ReqList.length)
-				this.stop();
+			if (counter === ReqList.length) {
+                this.stop();
+            }
 		}
 	}, onComplete, true);
 };

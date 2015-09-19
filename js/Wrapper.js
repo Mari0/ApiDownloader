@@ -148,15 +148,16 @@ exports.RunApiWrapper = function (settings, callback) {
 			}
 			meta.falsyConditions = falsyConditions;
 
-			if (apiSettings.options.indexOf('a') == -1) {
+			if (apiSettings.options.indexOf('a') === -1) {
 				Done(meta, function () {
 					if (callback) {
                         callback(meta, dataStore);
                     }
 				});
 			} else {
-				if (callback)
+				if (callback) {
                     callback(meta, dataStore);
+                }
 			}
 
 		});
