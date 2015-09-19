@@ -1,5 +1,6 @@
 # ApiDownloader
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+[![Codacy Badge](https://api.codacy.com/project/badge/c2a19ac85eea4d8aa19726d0dd9e6d33)](https://www.codacy.com/app/mario-rosenstengel/ApiDownloader)
 
 My first little nodejs project. It is a simple Wrapper for HTTP REST API's.
 The API's are defined as JSON, some small examples are located in the configs-folder.
