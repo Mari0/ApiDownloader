@@ -1,4 +1,4 @@
-fs = require('fs');
+var fs = require('fs');
 var ApiWrapper = require('./../dist/ApiDownloader.js').ApiWrapper;
 var ApiWrapperSettings = require('./../dist/ApiDownloader.js').ApiWrapperSettings;
 describe('GenerateEndpointReq Test for ApiWrapper-Class with Crunchbase API', function () {

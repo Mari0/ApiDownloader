@@ -28,3 +28,6 @@ api
 KeyCollection.json
 
 licenses.json
+
+.idea
+dist/

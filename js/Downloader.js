@@ -25,21 +25,27 @@ exports.Downloader = function (ApiSettings, IdList, requestsProJob, cronPattern,
 	var runWrapper = exports.RunApiWrapper;
 
 	var counter = 0;
-	if (!requestsProJob || requestsProJob < 1)
-		requestsProJob = IdList.length;
+	if (!requestsProJob || requestsProJob < 1) {
+        requestsProJob = IdList.length;
+    }
 	new CronJob(cronPattern, function () {
 		for (var i = 0; i < requestsProJob && counter < IdList.length; i++) {
 			ApiSettings.identifier = IdList[counter];
-			var error = runWrapper(ApiSettings, function (meta, data) {
-					onDownload(meta, data);
-				});
-			if (error) {
-				if (error.constructor.name === 'Error')
-					console.log(error);
+
+            var error =  (function(){
+                return runWrapper(ApiSettings, function (meta, data) {
+                    onDownload(meta, data);
+                });
+            })();
+
+            if (error) {
+                if (error.constructor.name === 'Error')
+                    console.log(error);
 			}
 			counter++;
-			if (counter == IdList.length)
-				this.stop();
+			if (counter === IdList.length) {
+                this.stop();
+            }
 		}
 	}, onComplete, true);
 };
@@ -52,10 +58,12 @@ exports.SimpleDownloader = function (ReqList, propertyValueOfUrl, requestsProJob
 	var makeReq = function (req, propertyValueOfUrl) {
 		var defered = Q.defer();
 		var url = null;
-		if (req.constructor.name === 'Object' && propertyValueOfUrl)
-			url = req[propertyValueOfUrl];
-		else
-			url = req;
+		if (req.constructor.name === 'Object' && propertyValueOfUrl) {
+            url = req[propertyValueOfUrl];
+        }
+		else {
+            url = req;
+        }
 		request.get(url, function (error, response, body) {
 			defered.resolve({body:body, meta:req});
 		});
@@ -63,15 +71,16 @@ exports.SimpleDownloader = function (ReqList, propertyValueOfUrl, requestsProJob
 	};
 
 	var counter = 0;
-	if (!requestsProJob || requestsProJob < 1)
-		requestsProJob = ReqList.length;
+	if (!requestsProJob || requestsProJob < 1) {
+        requestsProJob = ReqList.length;
+    }
 	new CronJob(cronPattern, function () {
 		for (var i = 0; i < requestsProJob && counter < ReqList.length; i++) {
 			makeReq(ReqList[counter],propertyValueOfUrl).then(function(data){
 				onDownload(data.body, data.meta);
 			});
 			counter++;
-			if (counter == ReqList.length)
+			if (counter === ReqList.length)
 				this.stop();
 		}
 	}, onComplete, true);

@@ -11,11 +11,13 @@
  * @see ApiWrapper
  */
 function ApiWrapperSettings(apiObj, ep, id, req, opt, opts) {
-    if (!opts)
+    if (!opts) {
         this.options = '';
-    else
+    }
+    else {
         /** the options of the ApiWrapper. Options can be -n no http-request, -a no additional http-request -f write result to file. file is specified in the outputFolder */
         this.options = opts;
+    }
     /**the json-object of the endpoint parsed form the ApiWrapper-config */
     this.api = apiObj;
     /** the endpoint of a API */

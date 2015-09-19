@@ -5,8 +5,9 @@
  @throws throws an Expection 'No ApiWrapperSettings-object'
  */
 function ApiWrapper(apiSettings) {
-    if (apiSettings.constructor.name != 'ApiWrapperSettings')
+    if (apiSettings.constructor.name !== 'ApiWrapperSettings') {
         return new Error('No ApiWrapperSettings-object');
+    }
     var jsonPath = require('JSONPath');
     var settings = apiSettings;
 
@@ -18,10 +19,12 @@ function ApiWrapper(apiSettings) {
         if (endpointObj) {
             //replace the identifer if necessary
             var identifierPath = null;
-            if (endpointObj.path.indexOf('{' + endpointObj.identifier + '}') != -1)
+            if (endpointObj.path.indexOf('{' + endpointObj.identifier + '}') !== -1) {
                 identifierPath = endpointObj.path.replace('{' + endpointObj.identifier + '}', settings.identifier);
-            else
+            }
+            else {
                 identifierPath = endpointObj.path;
+            }
             req = settings.api.basePath + identifierPath;
             //add additional parameters to the request
             //the parameter values are stored in param and they will be assigned numerically to the properties defined in the endpoint's parameters-array
@@ -30,6 +33,25 @@ function ApiWrapper(apiSettings) {
             req = setParameters(req, endpointObj.optional_parameters, settings.optParam);
         }
         return req;
+    };
+
+    /**
+     * Splits up the user parameters for a request
+     * @example --reqParam:user_id=test1&startup_id=test2 or  --optParam:....
+     * @param  {string} userParam the parameters as string
+     * @returns {object}
+     */
+    var formatUserParam = function (userParam) {
+        if (userParam) {
+            var result = {};
+            var tmp = userParam.replace('--reqParam:', '').replace('--optParam:', '');
+            var p = tmp.split(';');
+            p.forEach(function (val) {
+                var prop = val.split('=');
+                result[prop[0]] = prop[1];
+            });
+            return result;
+        }
     };
 
     /** helper function for GenerateEndpointReq and GetAdditionalReq-function. Sets all optional and required-Parameters for a request.
@@ -42,65 +64,37 @@ function ApiWrapper(apiSettings) {
     var setParameters = function (request, params, paramsUser, required) {
         var userParam = formatUserParam(paramsUser);
         if (params) {
-            if (request.indexOf('?') != -1)
+            if (request.indexOf('?') !== -1) {
                 request += '&';
-            else
+            }
+            else{
                 request += '?';
-            var i = 0;
+            }
+
             for (var key in params) {
                 if (params.hasOwnProperty(key)) {
-                    if (params[key] === '@apiKey')
+                    if (params[key] === '@apiKey') {
                         request += key + '=' + settings.api.apiKey + '&';
+                    }
                     else if (params[key] === '@user') {
-                        if (userParam != null && userParam[key] != null)
+                        if (userParam != null && userParam[key] != null) {
                             request += key + '=' + userParam[key] + '&';
-                        else {
-                            if (required)
-                                throw new Error('Request is not correct! Missing required parameters');
                         }
-                    } else
+                        else {
+                            if (required) {
+                                throw new Error('Request is not correct! Missing required parameters');
+                            }
+                        }
+                    } else {
                         request += key + '=' + params[key] + '&';
+                    }
                 }
             }
             request = request.slice(0, -1);
         }
         return request;
     };
-    var formatUserParam = function (userParam) {
-        //example:--reqParam:user_id=test1&startup_id=test2 or  --optParam:....
-        if (userParam) {
-            var result = {};
-            var tmp = userParam.replace('--reqParam:', '').replace('--optParam:', '');
-            var p = tmp.split(';');
-            p.forEach(function (val, i) {
-                var prop = val.split('=');
-                result[prop[0]] = prop[1];
-            });
-            return result;
-        }
-    };
-    /**
-     * Generates additonal http-Request if definied in the enpoint of the ApiWrapper-config file.
-     * Additional Request are extracted from the data with a json-path expression.
-     * @param data - the data from main http-request
-     * @param additionalReq - the additionalReq-object form the ApiWrapper-config
-     * @return a http-Request */
-    this.GetAdditionalReq = function (data, additionalReq) {
-        var getRequest = false;
-        if (additionalReq.request_condition) {
-            if (resolveCondition(additionalReq.request_condition, data))
-                getRequest = true;
-        } else {
-            getRequest = true;
-        }
-        if (getRequest) {
-            var req = jsonPath.eval(data, additionalReq.jsonPath)[0];
-            req = setParameters(req, additionalReq.required_parameters, null);
-            req = setParameters(req, additionalReq.optional_parameters, null);
-            return req;
-        } else
-            return null;
-    };
+
     /**
      * resolves the condition of a additional request.
      * @param condition - the condition is a string, which should satisfy the following pattern json-path (>|=|>=|<|<=|!=) (number|string|boolean)
@@ -121,12 +115,13 @@ function ApiWrapper(apiSettings) {
      */
     var resolveCondition = function (condition, data) {
         //try {
-        if (condition.search(/\w\ (>|=|>=|<|<=|!=)\ \w/g) != -1) {
+        if (condition.search(/\w\ (>|=|>=|<|<=|!=)\ \w/g) !== -1) {
             var p = condition.split(/\ (>|=|>=|<|<=|!=)\ /g);
             var val1 = jsonPath.eval(data, p[0])[0];
             var val2 = parseInt(p[2]);
-            if (typeof val2 != 'number')
+            if (typeof val2 !== 'number') {
                 val2 = p[2];
+            }
             switch (condition.match(/(>|=|>=|<|<=|!=)/g)[0]) {
                 case '>':
                     return val1 > val2;
@@ -137,14 +132,40 @@ function ApiWrapper(apiSettings) {
                 case '<=':
                     return val1 <= val2;
                 case '=':
-                    return val1 == val2;
+                    return val1 === val2;
                 case '!=':
-                    return val1 != val2;
+                    return val1 !== val2;
             }
         }
         //} catch (e) {
         //	return false;
         //}
     };
+
+    /**
+     * Generates additonal http-Request if definied in the enpoint of the ApiWrapper-config file.
+     * Additional Request are extracted from the data with a json-path expression.
+     * @param data - the data from main http-request
+     * @param additionalReq - the additionalReq-object form the ApiWrapper-config
+     * @return a http-Request */
+    this.GetAdditionalReq = function (data, additionalReq) {
+        var getRequest = false;
+        if (additionalReq.request_condition) {
+            if (resolveCondition(additionalReq.request_condition, data)) {
+                getRequest = true;
+            }
+        } else {
+            getRequest = true;
+        }
+        if (getRequest) {
+            var req = jsonPath.eval(data, additionalReq.jsonPath)[0];
+            req = setParameters(req, additionalReq.required_parameters, null);
+            req = setParameters(req, additionalReq.optional_parameters, null);
+            return req;
+        } else {
+            return null;
+        }
+    };
+
 }
 exports.ApiWrapper = ApiWrapper;

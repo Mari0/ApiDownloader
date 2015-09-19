@@ -18,7 +18,7 @@ Downloader(settings, zipList, 2, '*/5 * * * * *', function (meta, data) {
     postDocumentToArangoCollection('wrapper_test', data.root_data);
 },
 	function () {
-	console.log('Cron Downloader Job is finished!');
+	console.log('Cron Downloader Job is terminated!');
 });
 
 var postDocumentToArangoCollection = function (collectionName, document) {

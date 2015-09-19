@@ -2,7 +2,6 @@
 
 var Done = function (meta, callback) {
 	setTimeout(function () {
-		var done = false;
 		if (meta.Requests.length < meta.amountOfRequest) {
 			Done(meta, callback);
 			return;
@@ -26,14 +25,14 @@ var Done = function (meta, callback) {
  * @param callback {RunApiWrapper.callback} - the callback of provides the meta information and the data
  */
 exports.RunApiWrapper = function (settings, callback) {
-	var fs = require('fs');
-
 	var fetchResult = function (url, callback) {
 		var http = null;
-		if (url.indexOf('https') != -1)
-			http = require('https');
-		else
-			http = require('http');
+		if (url.indexOf('https') !== -1) {
+            http = require('https');
+        }
+		else {
+            http = require('http');
+        }
 
 		var bodyarr = [];
 		http.get(url, function (res) {
@@ -49,9 +48,7 @@ exports.RunApiWrapper = function (settings, callback) {
 	};
 
 	var meta = {};
-	var params = null;
 	var apiSettings = new ApiWrapperSettings();
-	var fileNameExt = '';
 
 	//meta.settings = settings;
 	apiSettings = settings;
@@ -60,14 +57,16 @@ exports.RunApiWrapper = function (settings, callback) {
 			if (apiSettings.api.endpoints[apiSettings.endpoint].identifier) {
 				if (!apiSettings.identifier) {
 					return new Error('Identifier is missing');
-				} else
-					meta.Id = apiSettings.identifier;
-			} else
-				fileNameExt = settings.identifier;
-		} else
-			return new Error('Error:No Endpoint defined!');
-	} else
-		return new Error('no API defined!');
+				} else {
+                    meta.Id = apiSettings.identifier;
+                }
+			}
+		} else {
+            return new Error('Error:No Endpoint defined!');
+        }
+	} else {
+        return new Error('no API defined!');
+    }
 
 	var wrapper = new ApiWrapper(apiSettings);
 	var root_req = wrapper.GenerateEndpointReq();
@@ -83,7 +82,7 @@ exports.RunApiWrapper = function (settings, callback) {
 	var amountOfRequest = 1;
 	meta.amountOfRequest = amountOfRequest;
 
-	if (apiSettings.options.indexOf('n') == -1) {
+	if (apiSettings.options.indexOf('n') === -1) {
 		fetchResult(root_req, function (res, code) {
 			var falsyConditions = [];
 			var obj2 = null;
@@ -104,13 +103,13 @@ exports.RunApiWrapper = function (settings, callback) {
 			});
 			dataStore['root_data'] = data;
 			if (apiSettings.api.endpoints[apiSettings.endpoint].additionalRequest) {
-				apiSettings.api.endpoints[apiSettings.endpoint].additionalRequest.forEach(function (val, index) {
+				apiSettings.api.endpoints[apiSettings.endpoint].additionalRequest.forEach(function (val) {
 					var add_req = wrapper.GetAdditionalReq(obj2, val);
 					if (add_req) {
 						//console.log('Making Request...' + add_req);
 						meta.amountOfRequest = ++amountOfRequest;
 						//make addiontional requests
-						if (apiSettings.options.indexOf('a') == -1) {
+						if (apiSettings.options.indexOf('a') === -1) {
 							fetchResult(add_req, function (data, addReq_code) {
 								try {
 									var subDoc = JSON.parse(data, 'utf-8');
@@ -135,26 +134,29 @@ exports.RunApiWrapper = function (settings, callback) {
 									});
 								}
 							});
-						} else
-							requests.push({
-								'req' : add_req,
-								'status' : 'not requested',
-								'name' : val.name
-							});
-					} else
-						falsyConditions.push(val.name);
+						} else {
+                            requests.push({
+                                'req': add_req,
+                                'status': 'not requested',
+                                'name': val.name
+                            });
+                        }
+					} else {
+                        falsyConditions.push(val.name);
+                    }
 				});
 			}
 			meta.falsyConditions = falsyConditions;
 
 			if (apiSettings.options.indexOf('a') == -1) {
 				Done(meta, function () {
-					if (callback)
-						callback(meta, dataStore);
+					if (callback) {
+                        callback(meta, dataStore);
+                    }
 				});
 			} else {
 				if (callback)
-					callback(meta, dataStore);
+                    callback(meta, dataStore);
 			}
 
 		});
@@ -164,8 +166,9 @@ exports.RunApiWrapper = function (settings, callback) {
 			'req' : root_req,
 			'status' : 'not requested'
 		});
-		if (callback)
-			callback(meta);
+		if (callback) {
+            callback(meta);
+        }
 	}
 };
 
